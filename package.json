@@ -1,0 +1,21 @@
+{
+  "name": "kanban-backend",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.js"
+  },
+  "author": "Alireza Askarpour <askarpourdev@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
