@@ -9,12 +9,14 @@ export const signup = async (req, res, next) => {
   try {
     const { username, email, password, full_name } = req.body
     const hashedPassword = hashString(password)
+    const token = tokenGenerator({ username })
 
     const user = await UserModel.create({
       full_name,
       username,
       email,
       password: hashedPassword,
+      token,
     })
 
     return res.status(201).json({
