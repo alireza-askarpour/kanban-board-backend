@@ -29,3 +29,10 @@ export const signupValidation = () => {
     }),
   ]
 }
+
+export const loginValidation = () => {
+  return [
+    body('username').isLength({ min: 3 }).withMessage('username must be at least 3 characters'),
+    body('password').isLength({ min: 8 }).withMessage('password must be at least 8 characters'),
+  ]
+}
