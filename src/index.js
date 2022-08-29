@@ -2,6 +2,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 
 import connectDB from './config/database.js'
+import allRoutes from './routes/index.js'
+
 import { globalErrorHandler, notFoundErrorHandler } from './controllers/errorsController.js'
 
 // config
@@ -15,6 +17,9 @@ const mode = process.env.NODE_ENV
 // middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// routes
+app.use(allRoutes)
 
 // error hanler
 app.use(notFoundErrorHandler)
