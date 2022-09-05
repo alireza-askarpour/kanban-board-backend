@@ -7,12 +7,12 @@ import { tokenGenerator } from '../utils/token.js'
 
 export const signup = async (req, res, next) => {
   try {
-    const { username, email, password, full_name } = req.body
+    const { username, email, password, fullname } = req.body
     const hashedPassword = hashString(password)
     const token = tokenGenerator({ username })
 
     const user = await UserModel.create({
-      full_name,
+      fullname,
       username,
       email,
       password: hashedPassword,
@@ -22,7 +22,7 @@ export const signup = async (req, res, next) => {
     return res.status(201).json({
       status: 201,
       success: true,
-      user,
+      token,
     })
   } catch (err) {
     next(err)
@@ -47,16 +47,17 @@ export const login = async (req, res, next) => {
 
     const token = tokenGenerator({ username })
 
-    user.token = token
-    user.save()
-
     return res.status(200).json({
       status: 200,
       success: true,
-      message: 'You have successfully logged into your account',
+      message: 'Login was successful!',
       token,
     })
   } catch (err) {
     next(err)
   }
+}
+
+export const verifyToken = (req, res) => {
+  res.status(200).json({ user: req.user })
 }

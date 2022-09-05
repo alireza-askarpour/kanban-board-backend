@@ -4,7 +4,7 @@ import UserModel from '../models/userModel.js'
 
 export const signupValidation = () => {
   return [
-    body('full_name').trim().notEmpty().withMessage('full name is empty'),
+    body('fullname').trim().notEmpty().withMessage('full name is empty'),
 
     body('username').isLength({ min: 3 }).withMessage('username must be at least 3 characters'),
 

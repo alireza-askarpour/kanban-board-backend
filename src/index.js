@@ -17,6 +17,12 @@ const mode = process.env.NODE_ENV
 // middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', '*')
+  res.setHeader('Access-Control-Allow-Methods', '*')
+  next()
+})
 
 // routes
 app.use(allRoutes)
