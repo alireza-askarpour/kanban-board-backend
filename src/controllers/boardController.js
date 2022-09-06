@@ -12,3 +12,12 @@ export const create = async (req, res, next) => {
     next(err)
   }
 }
+
+export const getAll = async (req, res, next) => {
+  try {
+    const boards = await BoardModel.find({ user: req.user._id }).sort('-position')
+    res.status(200).json(boards)
+  } catch (err) {
+    next(err)
+  }
+}
