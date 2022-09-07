@@ -12,5 +12,6 @@ router.put('/update', verifyToken, boardController.updatePosition)
 router.get('/favourites', verifyToken, boardController.getFavourites)
 router.put('/favourites', verifyToken, boardController.updateFavouritePosition)
 router.get('/:boardId', boardIdParamValidation, validate, verifyToken, boardController.getOne)
+router.put('/:boardId', boardIdParamValidation, validate, verifyToken, boardController.update)
 
 export default router
