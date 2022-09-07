@@ -55,3 +55,18 @@ export const updatePositionTask = async (req, res) => {
     next(err)
   }
 }
+
+export const deleteTask = async (req, res) => {
+  const { taskId } = req.params
+  try {
+    const currentTask = await TaskModel.findById(taskId)
+    await TaskModel.deleteOne({ _id: taskId })
+    const tasks = await TaskModel.find({ section: currentTask.section }).sort('postition')
+    for (const key in tasks) {
+      await TaskModel.findByIdAndUpdate(tasks[key].id, { $set: { position: key } })
+    }
+    res.status(200).json('deleted')
+  } catch (err) {
+    next(err)
+  }
+}
