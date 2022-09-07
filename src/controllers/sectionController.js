@@ -22,3 +22,14 @@ export const updateSection = async (req, res, next) => {
     next(err)
   }
 }
+
+export const deleteSection = async (req, res, next) => {
+  try {
+    const { sectionId } = req.params
+    await TaskModel.deleteMany({ section: sectionId })
+    await SectionModel.deleteOne({ _id: sectionId })
+    res.status(200).json('deleted')
+  } catch (err) {
+    next(err)
+  }
+}

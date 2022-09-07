@@ -8,5 +8,6 @@ const router = express.Router()
 
 router.post('/create', createValidation(), validate, verifyToken, sectionController.createSection)
 router.put('/update/:sectionId', updateValidation(), validate, verifyToken, sectionController.updateSection)
+router.delete('/delete/:sectionId', deleteValidation(), validate, verifyToken, sectionController.deleteSection)
 
 export default router
