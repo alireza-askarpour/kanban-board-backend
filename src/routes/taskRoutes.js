@@ -7,5 +7,6 @@ import * as taskController from '../controllers/taskController.js'
 const router = express.Router()
 
 router.post('/create', createValidation(), validate, verifyJwtToken, taskController.createTask)
+router.put('/:taskId', updateValidation(), validate, verifyJwtToken, taskController.updateTask)
 
 export default router
