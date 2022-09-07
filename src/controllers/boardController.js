@@ -60,3 +60,20 @@ export const updateFavouritePosition = async (req, res) => {
     next(err)
   }
 }
+
+export const getOne = async (req, res) => {
+  const { boardId } = req.params
+  try {
+    const board = await BoardModel.findOne({ user: req.user._id, _id: boardId })
+    if (!board) return res.status(404).json('Board not found')
+    const sections = await SectionModel.find({ board: boardId })
+    for (const section of sections) {
+      const tasks = await Task.find({ section: section.id }).populate('section').sort('-position')
+      section._doc.tasks = tasks
+    }
+    board._doc.sections = sections
+    res.status(200).json(board)
+  } catch (err) {
+    next(err)
+  }
+}
