@@ -8,5 +8,6 @@ const router = express.Router()
 
 router.post('/create', createValidation(), validate, verifyJwtToken, taskController.createTask)
 router.put('/:taskId', updateValidation(), validate, verifyJwtToken, taskController.updateTask)
+router.put('/update-position', upadtePositionValidation(), validate, verifyJwtToken, taskController.updatePositionTask)
 
 export default router

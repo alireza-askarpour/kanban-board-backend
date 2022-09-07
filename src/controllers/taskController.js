@@ -27,3 +27,31 @@ export const updateTask = async (req, res, next) => {
   }
 }
 
+export const updatePositionTask = async (req, res) => {
+  const { resourceList, destinationList, resourceSectionId, destinationSectionId } = req.body
+  const resourceListReverse = resourceList.reverse()
+  const destinationListReverse = destinationList.reverse()
+  try {
+    if (resourceSectionId !== destinationSectionId) {
+      for (const key in resourceListReverse) {
+        await Task.findByIdAndUpdate(resourceListReverse[key].id, {
+          $set: {
+            section: resourceSectionId,
+            position: key,
+          },
+        })
+      }
+    }
+    for (const key in destinationListReverse) {
+      await Task.findByIdAndUpdate(destinationListReverse[key].id, {
+        $set: {
+          section: destinationSectionId,
+          position: key,
+        },
+      })
+    }
+    res.status(200).json('updated')
+  } catch (err) {
+    next(err)
+  }
+}
