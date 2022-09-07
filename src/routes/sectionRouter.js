@@ -7,5 +7,6 @@ import { createValidation, updateValidation, deleteValidation } from '../validat
 const router = express.Router()
 
 router.post('/create', createValidation(), validate, verifyToken, sectionController.createSection)
+router.put('/update/:sectionId', updateValidation(), validate, verifyToken, sectionController.updateSection)
 
 export default router
