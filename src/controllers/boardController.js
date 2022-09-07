@@ -1,4 +1,5 @@
 import BoardModel from '../models/BoardModel.js'
+import SectionModel from '../models/sectionModel.js'
 
 export const create = async (req, res, next) => {
   try {
@@ -23,17 +24,26 @@ export const getAll = async (req, res, next) => {
 }
 
 export const updatePosition = async (req, res) => {
-  const { boards } = req.body
   try {
+    const { boards } = req.body
     for (const key in boards.reverse()) {
       const board = boards[key]
-      await BoardModel.findByIdAndUpdate(
-        board.id,
-        { $set: { position: key } }
-      )
+      await BoardModel.findByIdAndUpdate(board.id, { $set: { position: key } })
     }
     res.status(200).json('updated')
   } catch (err) {
-    res.status(500).json(err)
+    next(err)
+  }
+}
+
+export const getFavourites = async (req, res) => {
+  try {
+    const favourites = await BoardModel.find({
+      user: req.user._id,
+      favourite: true,
+    }).sort('-favouritePosition')
+    res.status(200).json(favourites)
+  } catch (err) {
+    next(err)
   }
 }
