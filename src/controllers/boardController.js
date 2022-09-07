@@ -1,4 +1,4 @@
-import BoardModel from '../models/BoardModel.js'
+import BoardModel from '../models/boardModel.js'
 import SectionModel from '../models/sectionModel.js'
 
 export const create = async (req, res, next) => {
