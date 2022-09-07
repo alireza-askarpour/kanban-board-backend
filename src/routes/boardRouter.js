@@ -10,6 +10,6 @@ router.post('/create', verifyToken, boardController.create)
 router.get('/', verifyToken, boardController.getAll)
 router.put('/update', verifyToken, boardController.updatePosition)
 router.get('/favourites', verifyToken, boardController.getFavourites)
-
+router.put('/favourites', verifyToken, boardController.updateFavouritePosition)
 
 export default router

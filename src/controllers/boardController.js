@@ -47,3 +47,16 @@ export const getFavourites = async (req, res) => {
     next(err)
   }
 }
+
+export const updateFavouritePosition = async (req, res) => {
+  const { boards } = req.body
+  try {
+    for (const key in boards.reverse()) {
+      const board = boards[key]
+      await BoardModel.findByIdAndUpdate(board.id, { $set: { favouritePosition: key } })
+    }
+    res.status(200).json('updated')
+  } catch (err) {
+    next(err)
+  }
+}
