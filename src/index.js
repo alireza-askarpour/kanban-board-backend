@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 
 import connectDB from './config/database.js'
 import allRoutes from './routes/index.js'
@@ -15,14 +16,9 @@ const port = process.env.PORT || 8000
 const mode = process.env.NODE_ENV
 
 // middlewares
+app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Headers', '*')
-  res.setHeader('Access-Control-Allow-Methods', '*')
-  next()
-})
 
 // routes
 app.use(allRoutes)

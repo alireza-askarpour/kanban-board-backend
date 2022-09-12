@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post('/create', verifyToken, boardController.create)
 router.get('/', verifyToken, boardController.getAll)
-router.put('/update', verifyToken, boardController.updatePosition)
+router.put('/update-position', verifyToken, boardController.updatePosition)
 router.get('/favourites', verifyToken, boardController.getFavourites)
 router.put('/favourites', verifyToken, boardController.updateFavouritePosition)
 router.get('/:boardId', boardIdParamValidation, validate, verifyToken, boardController.getOne)
