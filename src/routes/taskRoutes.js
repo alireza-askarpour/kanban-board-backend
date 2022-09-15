@@ -4,7 +4,7 @@ import { validate } from '../utils/validation.js'
 import { verifyJwtToken } from '../utils/token.js'
 import * as taskController from '../controllers/taskController.js'
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 router.post('/create', createValidation(), validate, verifyJwtToken, taskController.createTask)
 router.put('/:taskId', updateValidation(), validate, verifyJwtToken, taskController.updateTask)
