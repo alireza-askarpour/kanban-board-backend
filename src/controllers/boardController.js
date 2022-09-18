@@ -1,5 +1,6 @@
 import BoardModel from '../models/boardModel.js'
 import SectionModel from '../models/sectionModel.js'
+import TaskModel from '../models/taskModel.js'
 
 export const create = async (req, res, next) => {
   try {
@@ -23,12 +24,12 @@ export const getAll = async (req, res, next) => {
   }
 }
 
-export const updatePosition = async (req, res) => {
+export const updatePosition = async (req, res, next) => {
   try {
     const { boards } = req.body
     for (const key in boards.reverse()) {
       const board = boards[key]
-      await BoardModel.findByIdAndUpdate(board.id, { $set: { position: key } })
+      await BoardModel.findByIdAndUpdate(board._id, { $set: { position: key } })
     }
     res.status(200).json('updated')
   } catch (err) {
@@ -36,7 +37,7 @@ export const updatePosition = async (req, res) => {
   }
 }
 
-export const getFavourites = async (req, res) => {
+export const getFavourites = async (req, res, next) => {
   try {
     const favourites = await BoardModel.find({
       user: req.user._id,
@@ -48,12 +49,12 @@ export const getFavourites = async (req, res) => {
   }
 }
 
-export const updateFavouritePosition = async (req, res) => {
+export const updateFavouritePosition = async (req, res, next) => {
   const { boards } = req.body
   try {
     for (const key in boards.reverse()) {
       const board = boards[key]
-      await BoardModel.findByIdAndUpdate(board.id, { $set: { favouritePosition: key } })
+      await BoardModel.findByIdAndUpdate(board._id, { $set: { favouritePosition: key } })
     }
     res.status(200).json('updated')
   } catch (err) {
@@ -61,14 +62,14 @@ export const updateFavouritePosition = async (req, res) => {
   }
 }
 
-export const getOne = async (req, res) => {
+export const getOne = async (req, res, next) => {
   const { boardId } = req.params
   try {
     const board = await BoardModel.findOne({ user: req.user._id, _id: boardId })
     if (!board) return res.status(404).json('Board not found')
     const sections = await SectionModel.find({ board: boardId })
     for (const section of sections) {
-      const tasks = await Task.find({ section: section.id }).populate('section').sort('-position')
+      const tasks = await TaskModel.find({ section: section._id }).populate('section').sort('-position')
       section._doc.tasks = tasks
     }
     board._doc.sections = sections
@@ -78,7 +79,7 @@ export const getOne = async (req, res) => {
   }
 }
 
-export const update = async (req, res) => {
+export const update = async (req, res, next) => {
   try {
     const { boardId } = req.params
     const { title, description, favourite } = req.body
@@ -99,7 +100,7 @@ export const update = async (req, res) => {
       } else {
         for (const key in favourites) {
           const element = favourites[key]
-          await BoardModel.findByIdAndUpdate(element.id, { $set: { favouritePosition: key } })
+          await BoardModel.findByIdAndUpdate(element._id, { $set: { favouritePosition: key } })
         }
       }
     }
@@ -111,12 +112,12 @@ export const update = async (req, res) => {
   }
 }
 
-export const deleteBoard = async (req, res) => {
+export const deleteBoard = async (req, res, next) => {
   try {
     const { boardId } = req.params
     const sections = await SectionModel.find({ board: boardId })
     for (const section of sections) {
-      await Task.deleteMany({ section: section.id })
+      await TaskModel.deleteMany({ section: section._id })
     }
     await SectionModel.deleteMany({ board: boardId })
 
@@ -131,7 +132,7 @@ export const deleteBoard = async (req, res) => {
 
       for (const key in favourites) {
         const element = favourites[key]
-        await BoardModel.findByIdAndUpdate(element.id, { $set: { favouritePosition: key } })
+        await BoardModel.findByIdAndUpdate(element._id, { $set: { favouritePosition: key } })
       }
     }
 
@@ -140,7 +141,7 @@ export const deleteBoard = async (req, res) => {
     const boards = await BoardModel.find().sort('position')
     for (const key in boards) {
       const board = boards[key]
-      await BoardModel.findByIdAndUpdate(board.id, { $set: { position: key } })
+      await BoardModel.findByIdAndUpdate(board._id, { $set: { position: key } })
     }
 
     res.status(200).json('deleted')

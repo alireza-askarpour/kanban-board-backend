@@ -9,6 +9,7 @@ export const createValidation = () => {
     }),
     body('sectionId').custom((value) => {
       if (!isObjectId(value)) throw 'invalid section id'
+      return true
     }),
   ]
 }
@@ -37,7 +38,7 @@ export const updateValidation = () => {
       if (!isObjectId(value)) throw 'invalid board id'
       return true
     }),
-    param('sectionId').custom((value) => {
+    param('taskId').custom((value) => {
       if (!isObjectId(value)) throw 'invalid section id'
       return true
     }),

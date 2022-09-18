@@ -27,14 +27,15 @@ export const updateTask = async (req, res, next) => {
   }
 }
 
-export const updatePositionTask = async (req, res) => {
+export const updatePositionTask = async (req, res, next) => {
   const { resourceList, destinationList, resourceSectionId, destinationSectionId } = req.body
   const resourceListReverse = resourceList.reverse()
   const destinationListReverse = destinationList.reverse()
+  
   try {
     if (resourceSectionId !== destinationSectionId) {
       for (const key in resourceListReverse) {
-        await Task.findByIdAndUpdate(resourceListReverse[key].id, {
+        await TaskModel.findByIdAndUpdate(resourceListReverse[key]._id, {
           $set: {
             section: resourceSectionId,
             position: key,
@@ -43,7 +44,7 @@ export const updatePositionTask = async (req, res) => {
       }
     }
     for (const key in destinationListReverse) {
-      await Task.findByIdAndUpdate(destinationListReverse[key].id, {
+      await TaskModel.findByIdAndUpdate(destinationListReverse[key]._id, {
         $set: {
           section: destinationSectionId,
           position: key,
@@ -56,14 +57,14 @@ export const updatePositionTask = async (req, res) => {
   }
 }
 
-export const deleteTask = async (req, res) => {
+export const deleteTask = async (req, res, next) => {
   const { taskId } = req.params
   try {
     const currentTask = await TaskModel.findById(taskId)
     await TaskModel.deleteOne({ _id: taskId })
     const tasks = await TaskModel.find({ section: currentTask.section }).sort('postition')
     for (const key in tasks) {
-      await TaskModel.findByIdAndUpdate(tasks[key].id, { $set: { position: key } })
+      await TaskModel.findByIdAndUpdate(tasks[key]._id, { $set: { position: key } })
     }
     res.status(200).json('deleted')
   } catch (err) {
