@@ -7,12 +7,11 @@ import { tokenGenerator } from '../utils/token.js'
 
 export const signup = async (req, res, next) => {
   try {
-    const { username, email, password, fullname } = req.body
+    const { username, email, password } = req.body
     const hashedPassword = hashString(password)
     const token = tokenGenerator({ username })
 
     const user = await UserModel.create({
-      fullname,
       username,
       email,
       password: hashedPassword,
