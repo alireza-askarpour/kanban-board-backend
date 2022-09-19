@@ -39,7 +39,7 @@ export const updateValidation = () => {
       return true
     }),
     param('taskId').custom((value) => {
-      if (!isObjectId(value)) throw 'invalid section id'
+      if (!isObjectId(value)) throw 'invalid task id'
       return true
     }),
   ]
