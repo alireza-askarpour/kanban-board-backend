@@ -2,7 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import morgan from 'morgan'
+import swaggerUI from "swagger-ui-express"
 
+import { swaggerSetup } from './config/swagger.js'
 import connectDB from './config/database.js'
 import allRoutes from './routes/index.js'
 
@@ -21,6 +23,9 @@ app.use(morgan("dev"))
 app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// settings
+app.use("/api-doc", swaggerUI.serve, swaggerSetup)
 
 // routes
 app.use(allRoutes)
