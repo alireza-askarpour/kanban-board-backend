@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import createError from 'http-errors'
 
 import UserModel from '../models/userModel.js'
 
@@ -33,16 +34,10 @@ export const login = async (req, res, next) => {
     const { username, password } = req.body
 
     const user = await UserModel.findOne({ username }, { password: 1 })
-
-    if (!user) {
-      throw { status: 401, message: 'The username or password is incorrect' }
-    }
+    if (!user) throw createError.Unauthorized('The username or password is incorrect')
 
     const compareResult = bcrypt.compareSync(password, user.password)
-
-    if (!compareResult) {
-      throw { status: 401, message: 'The username or password is incorrect' }
-    }
+    if (!compareResult) throw createError.Unauthorized('The username or password is incorrect')
 
     const token = tokenGenerator({ username })
 

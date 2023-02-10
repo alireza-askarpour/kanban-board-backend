@@ -1,6 +1,9 @@
+import createError from "http-errors"
+
 export const globalErrorHandler = (err, req, res, next) => {
-  const status = err?.status || 500
-  const message = err?.message || 'INTERNAL_SERVER_ERROR'
+  const serverError = createError.InternalServerError('INTERNAL_SERVER_ERROR')
+  const status = err?.status || serverError.status
+  const message = err?.message || serverError.message
 
   return res.status(status).json({
     status,
