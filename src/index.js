@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import swaggerUI from "swagger-ui-express"
 
+import { isDevelopment } from './config/server.js'
 import { swaggerSetup } from './config/swagger.js'
 import connectDB from './config/database.js'
 import allRoutes from './routes/index.js'
@@ -19,7 +20,7 @@ const port = process.env.PORT || 8000
 const mode = process.env.NODE_ENV
 
 // middlewares
-app.use(morganMiddleware)
+if (isDevelopment) app.use(morganMiddleware)
 app.use(cors({ origin: '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
