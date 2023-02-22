@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
 import createError from 'http-errors'
 
-import UserModel from '../models/userModel.js'
+import UserModel from '../models/user-model.js'
 
-import { hashString } from '../utils/hashString.js'
+import { hashString } from '../utils/hash-string.js'
 import { tokenGenerator } from '../utils/token.js'
 
 export const signup = async (req, res, next) => {

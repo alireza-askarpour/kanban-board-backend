@@ -1,6 +1,6 @@
-import BoardModel from '../models/boardModel.js'
-import SectionModel from '../models/sectionModel.js'
-import TaskModel from '../models/taskModel.js'
+import BoardModel from '../models/board-model.js'
+import SectionModel from '../models/section-model.js'
+import TaskModel from '../models/task-model.js'
 
 export const create = async (req, res, next) => {
   const { parent } = req.body

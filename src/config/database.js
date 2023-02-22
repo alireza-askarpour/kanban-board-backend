@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 
 const connectDB = () => {
+  mongoose.set("strictQuery", false)
+  
   mongoose.connect(process.env.MONGO_URI, () => {
     console.log(`MongoDB Connected!`)
   })

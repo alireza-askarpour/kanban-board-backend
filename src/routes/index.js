@@ -1,9 +1,9 @@
 import express from 'express'
 
-import authRouter from './authRoutes.js'
-import boardRouter from './boardRouter.js'
-import sectionRouter from './sectionRouter.js'
-import taskRouter from './taskRoutes.js'
+import authRouter from './auth-router.js'
+import boardRouter from './board-router.js'
+import sectionRouter from './section-router.js'
+import taskRouter from './task-router.js'
 
 const router = express.Router()
 

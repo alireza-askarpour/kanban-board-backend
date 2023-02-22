@@ -1,6 +1,6 @@
 import express from 'express'
-import { verifyToken } from '../middlewares/verifyToken.js'
-import * as boardController from '../controllers/boardController.js'
+import { verifyToken } from '../middlewares/verify-token.js'
+import * as boardController from '../controllers/board-controller.js'
 import { boardIdParamValidation } from '../validations/board.js'
 import { validate } from '../utils/validation.js'
 

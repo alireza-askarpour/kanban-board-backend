@@ -1,5 +1,5 @@
-import TaskModel from '../models/taskModel.js'
-import SectionModel from '../models/sectionModel.js'
+import TaskModel from '../models/task-model.js'
+import SectionModel from '../models/section-model.js'
 
 export const createTask = async (req, res, next) => {
   try {

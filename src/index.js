@@ -8,7 +8,7 @@ import { swaggerSetup } from './config/swagger.js'
 import connectDB from './config/database.js'
 import allRoutes from './routes/index.js'
 
-import { globalErrorHandler, notFoundErrorHandler } from './controllers/errorsController.js'
+import { globalErrorHandler, notFoundErrorHandler } from './controllers/errors-controller.js'
 import { morganMiddleware } from './middlewares/morgan.js'
 
 // config

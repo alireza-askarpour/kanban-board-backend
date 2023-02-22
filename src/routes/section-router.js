@@ -1,6 +1,7 @@
 import express from 'express'
-import { verifyToken } from '../middlewares/verifyToken.js'
-import * as sectionController from '../controllers/sectionController.js'
+
+import { verifyToken } from '../middlewares/verify-token.js'
+import * as sectionController from '../controllers/section-controller.js'
 import { validate } from '../utils/validation.js'
 import { createValidation, updateValidation, deleteValidation } from '../validations/section.js'
 
