@@ -1,3 +1,5 @@
+import { StatusCodes } from 'http-status-codes'
+
 import TaskModel from '../models/task-model.js'
 import SectionModel from '../models/section-model.js'
 
@@ -11,7 +13,7 @@ export const createTask = async (req, res, next) => {
       position: tasksCount > 0 ? tasksCount : 0,
     })
     task._doc.section = section
-    res.status(201).json(task)
+    res.status(StatusCodes.CREATED).json(task)
   } catch (err) {
     next(err)
   }
@@ -21,7 +23,7 @@ export const updateTask = async (req, res, next) => {
   const { taskId } = req.params
   try {
     const task = await TaskModel.findByIdAndUpdate(taskId, { $set: req.body })
-    res.status(200).json(task)
+    res.status(StatusCodes.OK).json(task)
   } catch (err) {
     next(err)
   }
@@ -31,7 +33,7 @@ export const updatePositionTask = async (req, res, next) => {
   const { resourceList, destinationList, resourceSectionId, destinationSectionId } = req.body
   const resourceListReverse = resourceList.reverse()
   const destinationListReverse = destinationList.reverse()
-  
+
   try {
     if (resourceSectionId !== destinationSectionId) {
       for (const key in resourceListReverse) {
@@ -51,7 +53,7 @@ export const updatePositionTask = async (req, res, next) => {
         },
       })
     }
-    res.status(200).json('updated')
+    res.status(StatusCodes.OK).json('updated')
   } catch (err) {
     next(err)
   }
@@ -66,7 +68,7 @@ export const deleteTask = async (req, res, next) => {
     for (const key in tasks) {
       await TaskModel.findByIdAndUpdate(tasks[key]._id, { $set: { position: key } })
     }
-    res.status(200).json('deleted')
+    res.status(StatusCodes.OK).json('deleted')
   } catch (err) {
     next(err)
   }

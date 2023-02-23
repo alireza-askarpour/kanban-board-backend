@@ -1,4 +1,5 @@
-import createError from "http-errors"
+import createError from 'http-errors'
+import { StatusCodes } from 'http-status-codes'
 
 export const globalErrorHandler = (err, req, res, next) => {
   const serverError = createError.InternalServerError('INTERNAL_SERVER_ERROR')
@@ -13,8 +14,8 @@ export const globalErrorHandler = (err, req, res, next) => {
 }
 
 export const notFoundErrorHandler = (req, res) => {
-  return res.status(404).json({
-    status: 404,
+  return res.status(StatusCodes.NOT_FOUND).json({
+    status: StatusCodes.NOT_FOUND,
     success: false,
     message: `Can't find ${req.originalUrl} on the server!`,
   })

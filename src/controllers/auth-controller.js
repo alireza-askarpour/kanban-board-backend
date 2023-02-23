@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import createError from 'http-errors'
+import { StatusCodes } from 'http-status-codes'
 
 import UserModel from '../models/user-model.js'
 
@@ -12,15 +13,15 @@ export const signup = async (req, res, next) => {
     const hashedPassword = hashString(password)
     const token = tokenGenerator({ username })
 
-    const user = await UserModel.create({
+    await UserModel.create({
       username,
       email,
       password: hashedPassword,
       token,
     })
 
-    return res.status(201).json({
-      status: 201,
+    return res.status(StatusCodes.CREATED).json({
+      status: StatusCodes.CREATED,
       success: true,
       token,
     })
@@ -41,8 +42,8 @@ export const login = async (req, res, next) => {
 
     const token = tokenGenerator({ username })
 
-    return res.status(200).json({
-      status: 200,
+    return res.status(StatusCodes.OK).json({
+      status: StatusCodes.OK,
       success: true,
       message: 'Login was successful!',
       token,
@@ -53,5 +54,5 @@ export const login = async (req, res, next) => {
 }
 
 export const verifyToken = (req, res) => {
-  res.status(200).json({ user: req.user })
+  res.status(StatusCodes.OK).json({ user: req.user })
 }
