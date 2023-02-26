@@ -3,12 +3,12 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import swaggerUI from "swagger-ui-express"
 
-import { isDevelopment } from './config/server.js'
+import { isDevelopment, appListener, appErrorHandler } from './config/app.js'
 import { swaggerSetup } from './config/swagger.js'
 import connectDB from './config/database.js'
 import allRoutes from './routes/index.js'
 
-import { globalErrorHandler, notFoundErrorHandler } from './controllers/errors-controller.js'
+import { notFoundErrorHandler } from './controllers/errors-controller.js'
 import { morganMiddleware } from './middlewares/morgan.js'
 
 // config
@@ -33,8 +33,6 @@ app.use(allRoutes)
 
 // error hanler
 app.use(notFoundErrorHandler)
-app.use(globalErrorHandler)
+app.use(appErrorHandler)
 
-app.listen(port, () => {
-  console.log(`Server running in ${mode} mode on port ${port}`)
-})
+app.listen(port, appListener)
