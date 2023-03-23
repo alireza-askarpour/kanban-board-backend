@@ -5,11 +5,9 @@ import SectionModel from '../models/section-model.js'
 import TaskModel from '../models/task-model.js'
 
 export const create = async (req, res, next) => {
-  const { parent } = req.body
   try {
     const boardsCount = await BoardModel.find().count()
     const board = await BoardModel.create({
-      parent,
       user: req.user._id,
       position: boardsCount > 0 ? boardsCount : 0,
     })
@@ -21,7 +19,7 @@ export const create = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const boards = await BoardModel.find({ user: req.user._id, parent: undefined }).sort('-position')
+    const boards = await BoardModel.find({ user: req.user._id }).sort('-position')
     res.status(StatusCodes.OK).json(boards)
   } catch (err) {
     next(err)

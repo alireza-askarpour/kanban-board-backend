@@ -19,5 +19,5 @@ export const appErrorHandler = (err, req, res, next) => {
   const status = err.status || serverError.status
   const message = err.message || serverError.message
 
-  res.status(status).json({ ok: false, status, message, stack: err.stack })
+  res.status(status).json({ ok: false, status, message })
 }
