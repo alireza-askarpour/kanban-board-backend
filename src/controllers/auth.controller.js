@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import createError from 'http-errors'
 import { StatusCodes } from 'http-status-codes'
 
-import UserModel from '../models/user-model.js'
+import UserModel from '../models/user.model.js'
 
 import { hashString } from '../utils/hash-string.js'
 import { tokenGenerator } from '../utils/token.js'

@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 
-import SectionModel from '../models/section-model.js'
-import TaskModel from '../models/task-model.js'
+import SectionModel from '../models/section.model.js'
+import TaskModel from '../models/task.model.js'
 
 export const createSection = async (req, res, next) => {
   try {

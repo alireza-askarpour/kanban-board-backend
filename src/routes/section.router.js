@@ -1,9 +1,10 @@
 import express from 'express'
 
+import * as sectionController from '../controllers/section.controller.js'
 import { verifyToken } from '../middlewares/verify-token.js'
-import * as sectionController from '../controllers/section-controller.js'
-import { validate } from '../utils/validation.js'
+
 import { createValidation, updateValidation, deleteValidation } from '../validations/section.js'
+import { validate } from '../utils/validation.js'
 
 const router = express.Router({ mergeParams: true })
 

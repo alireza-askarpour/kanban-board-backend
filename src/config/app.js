@@ -1,5 +1,8 @@
 import chalk from 'chalk'
+import dotenv from 'dotenv'
 import createError from 'http-errors'
+
+dotenv.config()
 
 export const isProduction = process.env.NODE_ENV === 'production'
 export const isDevelopment = process.env.NODE_ENV === 'development'

@@ -1,8 +1,10 @@
 import express from 'express'
-import { createValidation, upadtePositionValidation, deleteValidation, updateValidation } from '../validations/task.js'
-import { validate } from '../utils/validation.js'
+
+import * as taskController from '../controllers/task.controller.js'
 import { verifyToken } from '../middlewares/verify-token.js'
-import * as taskController from '../controllers/task-controller.js'
+
+import { validate } from '../utils/validation.js'
+import { createValidation, upadtePositionValidation, deleteValidation, updateValidation } from '../validations/task.js'
 
 const router = express.Router({ mergeParams: true })
 
