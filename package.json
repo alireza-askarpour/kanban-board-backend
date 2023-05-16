@@ -10,7 +10,7 @@
   "author": "Alireza Askarpour <askarpourdev@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "chalk": "^5.2.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^4.0.0"
   },
   "devDependencies": {
