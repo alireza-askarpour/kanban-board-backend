@@ -21,6 +21,7 @@ router.patch(
   uploadCover.single('cover'),
   boardController.uploadCover,
 )
+router.delete('/delete-cover/:boardId', boardIdParamValidation(), verifyToken, boardController.deleteCover)
 router.get('/:boardId', boardIdParamValidation(), validate, verifyToken, boardController.getOne)
 router.put('/:boardId', boardIdParamValidation(), validate, verifyToken, boardController.update)
 router.delete('/:boardId', boardIdParamValidation(), validate, verifyToken, boardController.deleteBoard)

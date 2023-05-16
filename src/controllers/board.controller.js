@@ -159,20 +159,36 @@ export const uploadCover = async (req, res, next) => {
   try {
     const cover = req?.file?.path?.replace(/\\/g, '/')
 
-    console.log([boardId, cover])
-
     const existsBoard = await BoardModel.findById(boardId)
     if (!existsBoard) throw createHttpError.BadRequest('NOT_FOUND_BOARD')
 
     const updateResult = await BoardModel.updateOne({ _id: boardId }, { $set: { cover } })
     if (!updateResult.modifiedCount) throw createHttpError.InternalServerError()
 
-    res.status(StatusCodes.OK).json('uploaded')
+    res.status(StatusCodes.OK).json('UPLOADED')
   } catch (err) {
     if (req?.file) {
       const coverPath = req?.file?.path?.replace(/\\/g, '/')
       deleteFile(coverPath)
     }
+    next(err)
+  }
+}
+
+export const deleteCover = async (req, res, next) => {
+  const { boardId } = req.params
+  try {
+    const existsBoard = await BoardModel.findById(boardId)
+    if (!existsBoard) throw createHttpError.BadRequest('NOT_FOUND_BOARD')
+
+    console.log(existsBoard.cover)
+    deleteFile(existsBoard.cover)
+
+    const updateResult = await BoardModel.updateOne({ _id: boardId }, { $set: { cover: undefined } })
+    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError()
+
+    res.status(StatusCodes.OK).json('DELETED_COVER')
+  } catch (err) {
     next(err)
   }
 }
