@@ -8,12 +8,8 @@ const Schema = new mongoose.Schema(
     position: { type: Number },
     favourite: { type: Boolean, default: false },
     favouritePosition: { type: Number, default: 0 },
-    description: {
-      type: String,
-      default: `Add description here
-        🟢 You can add multiline description
-        🟢 Let's start...`,
-    },
+    description: { type: String, default: undefined },
+    cover: { type: String, default: undefined },
   },
   {
     timestamps: true,

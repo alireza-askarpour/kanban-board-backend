@@ -4,6 +4,9 @@ import BoardModel from '../models/board.model.js'
 import SectionModel from '../models/section.model.js'
 import TaskModel from '../models/task.model.js'
 
+import { deleteFile } from '../utils/delete-file.utils.js'
+import createHttpError from 'http-errors'
+
 export const create = async (req, res, next) => {
   try {
     const boardsCount = await BoardModel.find().count()
@@ -87,7 +90,6 @@ export const update = async (req, res, next) => {
     const { title, description, favourite } = req.body
 
     if (title === '') req.body.title = 'Untitled'
-    if (description === '') req.body.description = 'Add description here'
     const currentBoard = await BoardModel.findById(boardId)
     if (!currentBoard) return res.status(StatusCodes.NOT_FOUND).json('Board not found')
 
@@ -148,6 +150,29 @@ export const deleteBoard = async (req, res, next) => {
 
     res.status(StatusCodes.OK).json('deleted')
   } catch (err) {
+    next(err)
+  }
+}
+
+export const uploadCover = async (req, res, next) => {
+  const { boardId } = req.params
+  try {
+    const cover = req?.file?.path?.replace(/\\/g, '/')
+
+    console.log([boardId, cover])
+
+    const existsBoard = await BoardModel.findById(boardId)
+    if (!existsBoard) throw createHttpError.BadRequest('NOT_FOUND_BOARD')
+
+    const updateResult = await BoardModel.updateOne({ _id: boardId }, { $set: { cover } })
+    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError()
+
+    res.status(StatusCodes.OK).json('uploaded')
+  } catch (err) {
+    if (req?.file) {
+      const coverPath = req?.file?.path?.replace(/\\/g, '/')
+      deleteFile(coverPath)
+    }
     next(err)
   }
 }
