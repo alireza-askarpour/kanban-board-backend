@@ -9,9 +9,7 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true, min: 8, select: false },
     avatar: { type: String, default: '' },
-    skills: { type: [String], default: [] },
     teams: { type: [Types.ObjectId], default: [] },
-    roles: { type: [String], default: ['USER'] },
   },
   { timestamps: true },
 )

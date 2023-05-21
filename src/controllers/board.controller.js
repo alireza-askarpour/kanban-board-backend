@@ -1,11 +1,14 @@
 import { StatusCodes } from 'http-status-codes'
 
+import UserModel from '../models/user.model.js'
 import BoardModel from '../models/board.model.js'
 import SectionModel from '../models/section.model.js'
 import TaskModel from '../models/task.model.js'
 
 import { deleteFile } from '../utils/delete-file.utils.js'
 import createHttpError from 'http-errors'
+import { catchAsync } from '../utils/catch-async.js'
+import { inviteMemberSchema } from '../validations/board.js'
 
 export const create = async (req, res, next) => {
   try {
@@ -192,3 +195,25 @@ export const deleteCover = async (req, res, next) => {
     next(err)
   }
 }
+
+export const inviteMember = catchAsync(async (req, res) => {
+  const { boardId, access, email } = await inviteMemberSchema.validateAsync(req.body)
+
+  const board = await BoardModel.findById(boardId)
+  if (!board) throw createHttpError.BadRequest('DONT_EXISTS_BOARD')
+
+  const user = await UserModel.findOne({ email })
+  if (!user) throw createHttpError.BadRequest('DONT_EXISTS_EMAIL')
+
+  const isOwner = board.owner === req.user._id
+  if (!isOwner) throw createHttpError.Forbidden('ACCESS_DENIED')
+
+  const invitedResult = await BoardModel.updateOne({ _id: boardId }, { $push: { members: { user, access } } })
+  if (!invitedResult) throw createHttpError.InternalServerError('FAILED_INVITE')
+
+  res.status(StatusCodes.CREATED).json({
+    status: StatusCodes.CREATED,
+    success: true,
+    message: 'INVITED_MEMBER',
+  })
+})
