@@ -15,6 +15,7 @@ router.put('/update-position', boardController.updatePosition)
 router.get('/favourites', boardController.getFavourites)
 router.put('/favourites', boardController.updateFavouritePosition)
 router.post('/invite-member', boardController.inviteMember)
+router.delete('/delete-member', boardController.deleteMember)
 router.patch(
   '/upload-cover/:boardId',
   boardIdParamValidation(),

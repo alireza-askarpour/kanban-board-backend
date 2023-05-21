@@ -19,3 +19,8 @@ export const inviteMemberSchema = Joi.object({
   email: Joi.string().email().required().error(createHttpError.BadRequest('INVALID_EMAIL')),
   access: Joi.string().pattern(/(view|edit)/i).error(createHttpError.BadRequest('INVALID_ACCESS')),
 })
+
+export const deleteMemberSchema = Joi.object({
+  boardId: Joi.string().pattern(MONGO_ID_PATTERN).required().error(createHttpError.BadRequest('INVALID_BOARD_ID')),
+  userId: Joi.string().pattern(MONGO_ID_PATTERN).required().error(createHttpError.BadRequest('INVALID_USER_ID')),
+})
