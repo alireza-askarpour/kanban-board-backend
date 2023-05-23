@@ -14,7 +14,7 @@ export const create = async (req, res, next) => {
   try {
     const boardsCount = await BoardModel.find().count()
     const board = await BoardModel.create({
-      user: req.user._id,
+      owner: req.user._id,
       position: boardsCount > 0 ? boardsCount : 0,
     })
     res.status(StatusCodes.CREATED).json(board)
@@ -25,7 +25,7 @@ export const create = async (req, res, next) => {
 
 export const getAll = async (req, res, next) => {
   try {
-    const boards = await BoardModel.find({ user: req.user._id }).sort('-position')
+    const boards = await BoardModel.find({ owner: req.user._id }).sort('-position')
     res.status(StatusCodes.OK).json(boards)
   } catch (err) {
     next(err)
@@ -48,7 +48,7 @@ export const updatePosition = async (req, res, next) => {
 export const getFavourites = async (req, res, next) => {
   try {
     const favourites = await BoardModel.find({
-      user: req.user._id,
+      owner: req.user._id,
       favourite: true,
     }).sort('-favouritePosition')
     res.status(StatusCodes.OK).json(favourites)
@@ -73,7 +73,7 @@ export const updateFavouritePosition = async (req, res, next) => {
 export const getOne = async (req, res, next) => {
   const { boardId } = req.params
   try {
-    const board = await BoardModel.findOne({ user: req.user._id, _id: boardId })
+    const board = await BoardModel.findOne({ owner: req.user._id, _id: boardId })
     if (!board) return res.status(StatusCodes.NOT_FOUND).json('Board not found')
     const sections = await SectionModel.find({ board: boardId })
     for (const section of sections) {
@@ -98,7 +98,7 @@ export const update = async (req, res, next) => {
 
     if (favourite !== undefined && currentBoard.favourite !== favourite) {
       const favourites = await BoardModel.find({
-        user: currentBoard.user,
+        owner: currentBoard.user,
         favourite: true,
         _id: { $ne: boardId },
       }).sort('favouritePosition')
@@ -132,7 +132,7 @@ export const deleteBoard = async (req, res, next) => {
 
     if (currentBoard.favourite) {
       const favourites = await BoardModel.find({
-        user: currentBoard.user,
+        owner: currentBoard.user,
         favourite: true,
         _id: { $ne: boardId },
       }).sort('favouritePosition')
@@ -166,7 +166,7 @@ export const uploadCover = async (req, res, next) => {
     if (!existsBoard) throw createHttpError.BadRequest('NOT_FOUND_BOARD')
 
     const updateResult = await BoardModel.updateOne({ _id: boardId }, { $set: { cover } })
-    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError()
+    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError('FAILED_UPLOAD_COVER')
 
     res.status(StatusCodes.OK).json('UPLOADED')
   } catch (err) {
@@ -188,7 +188,7 @@ export const deleteCover = async (req, res, next) => {
     deleteFile(existsBoard.cover)
 
     const updateResult = await BoardModel.updateOne({ _id: boardId }, { $set: { cover: undefined } })
-    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError()
+    if (!updateResult.modifiedCount) throw createHttpError.InternalServerError('FAILED_DELETE_COVER')
 
     res.status(StatusCodes.OK).json('DELETED_COVER')
   } catch (err) {
@@ -204,6 +204,9 @@ export const inviteMember = catchAsync(async (req, res) => {
 
   const user = await UserModel.findOne({ email })
   if (!user) throw createHttpError.BadRequest('DONT_EXISTS_EMAIL')
+
+  const existMember = await BoardModel.findOne({ member })
+  if (existMember) throw createHttpError.BadRequest('EXISTS_MEMBER')
 
   const isOwner = board.owner === req.user._id
   if (!isOwner) throw createHttpError.Forbidden('ACCESS_DENIED')
