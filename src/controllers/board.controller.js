@@ -205,10 +205,10 @@ export const inviteMember = catchAsync(async (req, res) => {
   const user = await UserModel.findOne({ email })
   if (!user) throw createHttpError.BadRequest('DONT_EXISTS_EMAIL')
 
-  const existMember = await BoardModel.findOne({ member })
-  if (existMember) throw createHttpError.BadRequest('EXISTS_MEMBER')
+  const checkExistMember = await BoardModel.findOne({ 'members.user': user._id })
+  if (checkExistMember) throw createHttpError.BadRequest('EXISTS_MEMBER')
 
-  const isOwner = board.owner === req.user._id
+  const isOwner = String(board.owner) == req.user._id
   if (!isOwner) throw createHttpError.Forbidden('ACCESS_DENIED')
 
   const invitedResult = await BoardModel.updateOne({ _id: boardId }, { $push: { members: { user, access } } })
