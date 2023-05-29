@@ -9,6 +9,7 @@ import { deleteFile } from '../utils/delete-file.utils.js'
 import createHttpError from 'http-errors'
 import { catchAsync } from '../utils/catch-async.js'
 import { deleteMemberSchema, inviteMemberSchema } from '../validations/board.js'
+import { boardIdSchema } from '../validations/publica.validation.js'
 
 export const create = async (req, res, next) => {
   try {
@@ -17,6 +18,7 @@ export const create = async (req, res, next) => {
       owner: req.user._id,
       position: boardsCount > 0 ? boardsCount : 0,
     })
+    console.log('yes')
     res.status(StatusCodes.CREATED).json(board)
   } catch (err) {
     next(err)
@@ -70,22 +72,21 @@ export const updateFavouritePosition = async (req, res, next) => {
   }
 }
 
-export const getOne = async (req, res, next) => {
+export const getOne = catchAsync(async (req, res) => {
   const { boardId } = req.params
-  try {
-    const board = await BoardModel.findOne({ owner: req.user._id, _id: boardId })
-    if (!board) return res.status(StatusCodes.NOT_FOUND).json('Board not found')
-    const sections = await SectionModel.find({ board: boardId })
-    for (const section of sections) {
-      const tasks = await TaskModel.find({ section: section._id }).populate('section').sort('-position')
-      section._doc.tasks = tasks
-    }
-    board._doc.sections = sections
-    res.status(StatusCodes.OK).json(board)
-  } catch (err) {
-    next(err)
+
+  const board = await BoardModel.findOne({ owner: req.user._id, _id: boardId }).populate(['owner', 'members.user'])
+  if (!board) throw createHttpError.NotFound('BOARD_NOT_FOUND')
+
+  const sections = await SectionModel.find({ board: boardId })
+  for (const section of sections) {
+    const tasks = await TaskModel.find({ section: section._id }).sort('-position')
+    section._doc.tasks = tasks
   }
-}
+  board._doc.sections = sections
+
+  res.status(StatusCodes.OK).json(board)
+})
 
 export const update = async (req, res, next) => {
   try {
@@ -197,13 +198,14 @@ export const deleteCover = async (req, res, next) => {
 }
 
 export const inviteMember = catchAsync(async (req, res) => {
-  const { boardId, access, email } = await inviteMemberSchema.validateAsync(req.body)
+  const { boardId } = await boardIdSchema.validateAsync(req.params)
+  const { access, email } = await inviteMemberSchema.validateAsync(req.body)
 
   const board = await BoardModel.findById(boardId)
-  if (!board) throw createHttpError.BadRequest('DONT_EXISTS_BOARD')
+  if (!board) throw createHttpError.NotFound('BOARD_NOT_FOUND')
 
   const user = await UserModel.findOne({ email })
-  if (!user) throw createHttpError.BadRequest('DONT_EXISTS_EMAIL')
+  if (!user) throw createHttpError.NotFound('DONT_EXISTS_USER_WHID_EMAIL')
 
   const checkExistMember = await BoardModel.findOne({ 'members.user': user._id })
   if (checkExistMember) throw createHttpError.BadRequest('EXISTS_MEMBER')
@@ -217,7 +219,7 @@ export const inviteMember = catchAsync(async (req, res) => {
   res.status(StatusCodes.CREATED).json({
     status: StatusCodes.CREATED,
     success: true,
-    message: 'INVITED_MEMBER',
+    member: { user, access },
   })
 })
 

@@ -11,7 +11,7 @@ const UserSchema = new Schema(
     avatar: { type: String, default: '' },
     teams: { type: [Types.ObjectId], default: [] },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 )
 
 export default model('User', UserSchema)

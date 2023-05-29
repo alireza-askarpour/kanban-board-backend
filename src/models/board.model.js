@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const MemberSchema = new mongoose.Schema(
   {
     access: { type: String, enum: ['view', 'edit'], default: 'view' },
-    user: { type: mongoose.Types.ObjectId, required: true, unique: true },
+    user: { type: mongoose.Types.ObjectId, required: true, unique: true, ref: 'User' },
   },
   {
     timestamps: true,
